@@ -1,0 +1,259 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <title> AreaSeletor </title>
+  <meta name="Generator" content="EditPlus">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+
+ 
+  <link rel="stylesheet" href="css/address.css">
+  <script type="text/javascript" src="js/jquery-1.11.1.js"></script>
+  <script type="text/javascript" src="js/json2.js"></script>
+  <script type="text/javascript" src="js/area_selector.js"></script>
+  <script type="text/javascript">
+
+ $(document).ready(function(){
+
+		var country_selected = 0;           //记录国家选择
+		var country_selected_id;            //保存选中的国家的id
+		var province_selected_id;           //保存选中的省的id
+		var city_selected_id;               //保存选中的城市的id
+		var county_selected_id;             //保存选中的县区的id
+		var street_selected_id;             //保存选中的街道的id
+
+		//点击选择国家事件
+ 		$("#jq-component-country").click(function(){
+ 			$("#jq-component-country-drop").toggleClass("bf-popupmenu-hidden");
+ 		});
+		
+		//移动鼠标选择国家事件
+ 		$(".bf-menuitem").bind({mouseover:function(){
+			$(this).toggleClass("bf-menuitem-hover");
+ 		},mouseout:function(){
+			$(this).toggleClass("bf-menuitem-hover");
+		}
+		});
+
+		//点击选择城市事件
+		$("#J_CnCity").click(function(){
+			$("#jq-component-city-drop").toggleClass("J_CnCity-hidden");
+
+
+		});
+		//点击城市tab
+		$("#city-province,#city-city,#city-district,#city-street").click(function(){
+			$("#city-province,#city-city,#city-district,#city-street").removeClass("current");
+			$(this).addClass("current");
+		});
+
+		//选择国家成功事件
+		$(".bf-menuitem").mousedown(function(){	
+
+		    window.country_selected_id = window.event.srcElement.id              //保存选中的国家的id
+			
+			if(window.country_select == 0){                                      
+				$(this).addClass("bf-menuitem-selected");                        //选中添加样式
+
+				window.country_select++;	                                     //计数器切换选中样式   
+
+				$("#jq-component-country-drop").addClass("bf-popupmenu-hidden"); //隐藏下拉项
+																				 
+				Country_Change();                                                //选中的国家显示出来
+			}
+			else{
+				$(".bf-menuitem").removeClass("bf-menuitem-selected");           //添加之前先删除此类的选中样式
+
+				$(this).addClass("bf-menuitem-selected");                        //添加选中样式
+
+				$("#jq-component-country-drop").addClass("bf-popupmenu-hidden"); //隐藏下拉项
+																				 
+				Country_Change();                                                //选中的国家显示出来
+			}
+			
+		});
+		//动态改变选中后的国家
+		function Country_Change(){
+
+			var country_selected_code = parseInt(window.country_selected_id);            //转换id为数字
+
+			switch(country_selected_code){
+				case 1:
+						$("#jq-content-jq-component-country").html("请选择国家");
+						$("#J_CnCity").addClass("J_CnCity-hidden");
+						
+						break;
+				case 2:
+						$("#jq-content-jq-component-country").html("中国大陆");
+						
+						//发送id到后台读取数据，返回
+						getCountryId();
+
+						$("#J_CnCity").removeClass("J_CnCity-hidden");
+						break;
+				case 3:
+						$("#jq-content-jq-component-country").html("港澳台");		
+
+						$("#J_CnCity").removeClass("J_CnCity-hidden");
+
+						getCountryId();                         //解析数据到城市栏
+						break;
+				case 4:
+						$("#jq-content-jq-component-country").html("海外");
+						
+						getCountryId();
+
+						$("#J_CnCity").removeClass("J_CnCity-hidden");
+						break;
+				case 5:
+						$("#jq-content-jq-component-country").html("马来西亚");
+						
+						getCountryId();                         //解析数据到城市栏
+
+						$("#J_CnCity").removeClass("J_CnCity-hidden");
+						break;
+			}
+		}
+		//json数据反序列化
+		function json2Operator(data){
+			var obj = JSON.parse(data);
+			return obj;
+		}
+
+		//获取国家id并返回数据
+		function getCountryId(){
+			var country_id = parseInt(window.country_selected_id);
+
+				var country_id = parseInt(window.country_selected_id);        //转换当前国家id为数字
+
+				if(country_id == 2){
+					var china_pro_data = json2Operator(tb_China_Province);    //中国各省
+
+					$("#city-select-tab").html("<a class='current' href='#city-province'>省份</a><a class='' href='#city-city' >城市</a><a class='' href='#city-district'>县区</a><a class='last' href='#city-street'>街道</a>");		
+					
+					$("#city-select-content").html("<div class='city-select' id='city-province'><dl class='fn-clear city-select-province'><dt>A-G</dt><dd></dd></dl><dl class='fn-clear city-select-province'><dt>H-K</dt><dd></dd></dl><dl class='fn-clear city-select-province'><dt>L-S</dt><dd></dd></dl><dl class='fn-clear city-select-province'><dt>T-Z</dt><dd></dd></dl></div><div class='city-select' id='city-city' style='display: none;'></div><a class='last' href='#city-street'  style='display: none;'></a><div class='city-select' id='city-district' style='display: none;'></div>");
+					
+					for(var p in china_pro_data["A-G"]){
+						$("#city-province dl:eq(0) dd").append("<a title='" +china_pro_data["A-G"][p][1]+ "' id='" +china_pro_data["A-G"][p][0]+ "' href='javascript:;'>" +china_pro_data["A-G"][p][1]+ "</a>");
+					}
+					for(var p in china_pro_data["H-K"]){
+						$("#city-province dl:eq(1) dd").append("<a title='" +china_pro_data["H-K"][p][1]+ "' id='" +china_pro_data["H-K"][p][0]+ "' href='javascript:;'>" +china_pro_data["H-K"][p][1]+ "</a>");
+					}
+					for(var p in china_pro_data["L-S"]){
+						$("#city-province dl:eq(2) dd").append("<a title='" +china_pro_data["L-S"][p][1]+ "' id='" +china_pro_data["L-S"][p][0]+ "' href='javascript:;'>" +china_pro_data["L-S"][p][1]+ "</a>");
+					}
+					for(var p in china_pro_data["T-Z"]){
+						$("#city-province dl:eq(3) dd").append("<a title='" +china_pro_data["T-Z"][p][1]+ "' id='" +china_pro_data["T-Z"][p][0]+ "' href='javascript:;'>" +china_pro_data["T-Z"][p][1]+ "</a>");
+					}
+					
+					
+				}
+				if(country_id == 3){
+					var gat_data = json2Operator(tb_Gat_data);          //港澳台
+					var gat = [];
+
+					for(var p in gat_data){                             //遍历港澳台数据
+						if(gat_data[p][2] == "1"){                      //提取港澳台，通过识别每条数据的第三位为1
+							gat.push(gat_data[p]);                      //保存提取的数据
+						}
+					}
+					$("#city-select-tab").html("<a class='current' href='#city-province'>其他</a><a class='' href='#city-city' >城市</a><a class='last' href='#city-district'>县区</a>");		
+					
+					$("#city-select-content").html("<div class='city-select' id='city-province'><dl class='fn-clear city-select-province'><dd></dd></dl></div><div class='city-select' id='city-city' style='display: none;'></div><div class='city-select' id='city-district' style='display: none;'></div>");
+
+					for(var i in gat){
+						$(".city-select-province dd").append("<a title='" +gat[i][1]+ "' id='" +gat[i][0]+ "' href='javascript:;'>" +gat[i][1]+ "</a>");
+					}
+
+				}
+				if(country_id == 4){
+					
+				}
+				if(country_id == 5){
+					var malaysia_data = json2Operator(tb_MalaysiaPC);          //马来西亚
+					var ma = [];
+
+					for(var p in malaysia_data){							   //遍历马来西亚数据
+						if(malaysia_data[p][2] == "125"){                      //通过识别每条数据的第三位为125
+							ma.push(malaysia_data[p]);                         //保存提取的数据
+						}
+					}
+					$("#city-select-tab").html("<a class='current' href='#city-province'>州</a><a class='last' href='#city-city'>市</a>");		
+					
+					$("#city-select-content").html("<div class='city-select' id='city-province'><dl class='fn-clear city-select-province'><dd></dd></dl></div><div class='city-select' id='city-city' style='display: none;'></div>");
+
+					for(var i in ma){
+						$(".city-select-province dd").append("<a title='" +ma[i][1]+ "' id='" +ma[i][0]+ "' href='javascript:;'>" +ma[i][1]+ "</a>");
+					}
+				}
+		}
+		
+ });
+
+  </script>
+ </head>
+
+ <body>
+ <div class="form-box">
+	 <form method="post" action="#">
+		 <div class="item item-devision" id="J_ItemDivision">
+			<span class="item-label">所在地区：<i>*</i></span>
+
+			<div id="J_CitySelect" class="jq-clear clearfix">
+
+				<div id="jq-component-country" class="bf-select sSelect" tabindex="0"role="button"style="-webkit-user-select: none;">
+
+					<div id="jq-content-jq-component-country" class="bf-select-content bf-menu-button-content bf-button-content">请选择国家
+					</div>
+
+					<div class="bf-select-dropdown bf-menu-button-dropdown bf-button-dropdown">
+			    		<div class="bf-select-dropdown-inner bf-menu-button-dropdown-inner bf-button-dropdown-inner"></div>
+					</div>
+
+				</div>
+
+				<div class="bf-select bf-cn-select lSelect" id="J_CnCity">
+
+					<div id="city-title" class="city-title">请选择城市</div>
+
+					<div class="bf-menu-button-dropdown"></div>
+
+				</div>
+
+			</div>
+		</div>
+	</form>
+</div>
+	
+<div id="jq-component-country-drop" class="bf-popupmenu bf-menu bf-popupmenu-hidden" role="menu" style="-webkit-user-select: none; position: relative; left: 205px; top: 18px; width: 88px;">
+	<div id="jq-content-jq-component-country-drop" class="bf-popupmenu-content">
+
+		<div id="1-jq-component-country" class="bf-menuitem" role="menuitemradio" style="-webkit-user-select: none;">请选择国家</div>
+
+		<div id="2-jq-component-country" class="bf-menuitem" role="menuitemradio" style="-webkit-user-select: none;">中国大陆</div>
+
+		<div id="3-jq-component-country" class="bf-menuitem" role="menuitemradio" style="-webkit-user-select: none;">港澳台</div>
+
+		<div id="4-jq-component-country" class="bf-menuitem" role="menuitemradio" style="-webkit-user-select: none;">海外</div>
+
+		<div id="5-jq-component-country" class="bf-menuitem" role="menuitemradio" style="-webkit-user-select: none;">马来西亚</div>
+
+	</div>
+</div>	
+
+
+
+<div id="jq-component-city-drop" class="jq-overlay J_CnCity-hidden" style="width: 300px; left: 313px; top: 36px;">
+
+	<div id="jq-content-jq-component-city-content" class="jq-overlay-content">
+		<div id="city-select">
+			<div id="city-select-tab" class="city-select-tab"></div>
+			<div id="city-select-content" class="city-select-content"></div>
+		</div>
+	</div>
+</div>
+
+
+ </body>
+</html>
