@@ -1,4 +1,4 @@
-body {
+﻿body {
 	color: #333;
 	font: 400 12px/1.6 arial,sans-serif;
 }
@@ -176,8 +176,6 @@ dd {
 
 .city-select dd{width:233px;display:inline;float:left;margin-left:0}
 
-.city-select-province dd,.city-select-city dd,.city-select-street dd,.city-select-district dd{width:270px}
-
 .city-select a{
 	display:inline-block;
 	color:#4D4D4D;
@@ -213,3 +211,8 @@ dd {
 	outline: 0;
 	-webkit-tap-highlight-color: rgba(0,0,0,0);
 }
+
+
+
+
+
