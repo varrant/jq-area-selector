@@ -39,14 +39,9 @@
 		//点击选择城市事件
 		$("#J_CnCity").click(function(){
 			$("#jq-component-city-drop").toggleClass("J_CnCity-hidden");
-
-
 		});
 		//点击城市tab
-		$("#city-province,#city-city,#city-district,#city-street").click(function(){
-			$("#city-province,#city-city,#city-district,#city-street").removeClass("current");
-			$(this).addClass("current");
-		});
+		$("div.city-select-tab a").click().addClass("current").siblings().removeClass("current");
 
 		//选择国家成功事件
 		$(".bf-menuitem").mousedown(function(){	
@@ -82,22 +77,22 @@
 				case 1:
 						$("#jq-content-jq-component-country").html("请选择国家");
 						$("#J_CnCity").addClass("J_CnCity-hidden");
+						$("#jq-component-city-drop").addClass("J_CnCity-hidden");
 						
 						break;
 				case 2:
 						$("#jq-content-jq-component-country").html("中国大陆");
 						
-						//发送id到后台读取数据，返回
 						getCountryId();
 
 						$("#J_CnCity").removeClass("J_CnCity-hidden");
 						break;
 				case 3:
 						$("#jq-content-jq-component-country").html("港澳台");		
+						
+					    getCountryId();                         //解析数据到城市栏
 
 						$("#J_CnCity").removeClass("J_CnCity-hidden");
-
-						getCountryId();                         //解析数据到城市栏
 						break;
 				case 4:
 						$("#jq-content-jq-component-country").html("海外");
@@ -130,9 +125,11 @@
 				if(country_id == 2){
 					var china_pro_data = json2Operator(tb_China_Province);    //中国各省
 
-					$("#city-select-tab").html("<a class='current' href='#city-province'>省份</a><a class='' href='#city-city' >城市</a><a class='' href='#city-district'>县区</a><a class='last' href='#city-street'>街道</a>");		
+					$("#city-select-tab").html("<a class='current' href='#city-province'>省份</a><a class='none' href='#city-city' >城市</a><a class='none' href='#city-district'>县区</a><a class='last' href='#city-street'>街道</a>");		
 					
 					$("#city-select-content").html("<div class='city-select' id='city-province'><dl class='fn-clear city-select-province'><dt>A-G</dt><dd></dd></dl><dl class='fn-clear city-select-province'><dt>H-K</dt><dd></dd></dl><dl class='fn-clear city-select-province'><dt>L-S</dt><dd></dd></dl><dl class='fn-clear city-select-province'><dt>T-Z</dt><dd></dd></dl></div><div class='city-select' id='city-city' style='display: none;'></div><a class='last' href='#city-street'  style='display: none;'></a><div class='city-select' id='city-district' style='display: none;'></div>");
+					
+					$(".city-select dd").css("width","233px");
 					
 					for(var p in china_pro_data["A-G"]){
 						$("#city-province dl:eq(0) dd").append("<a title='" +china_pro_data["A-G"][p][1]+ "' id='" +china_pro_data["A-G"][p][0]+ "' href='javascript:;'>" +china_pro_data["A-G"][p][1]+ "</a>");
