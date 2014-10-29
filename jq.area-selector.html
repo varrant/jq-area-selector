@@ -40,13 +40,17 @@
 		$("#J_CnCity").click(function(){
 			$("#jq-component-city-drop").toggleClass("J_CnCity-hidden");
 		});
-		//点击城市tab
-		$("div.city-select-tab a").click().addClass("current").siblings().removeClass("current");
-
+		/*
+		*(未完成)
+		*改变选项时，选项内容也要切换，根据全局id
+		*/
+		function change_tab(){
+			$("div.city-select-tab a").click().addClass("current").siblings().removeClass("current");
+		}
 		//选择国家成功事件
 		$(".bf-menuitem").mousedown(function(){	
 
-		    window.country_selected_id = window.event.srcElement.id              //保存选中的国家的id
+		    window.country_selected_id = this.id              //保存选中的国家的id
 			
 			if(window.country_select == 0){                                      
 				$(this).addClass("bf-menuitem-selected");                        //选中添加样式
@@ -127,7 +131,7 @@
 
 					$("#city-select-tab").html("<a class='current' href='#city-province'>省份</a><a class='none' href='#city-city' >城市</a><a class='none' href='#city-district'>县区</a><a class='last' href='#city-street'>街道</a>");		
 					
-					$("#city-select-content").html("<div class='city-select' id='city-province'><dl class='fn-clear city-select-province'><dt>A-G</dt><dd></dd></dl><dl class='fn-clear city-select-province'><dt>H-K</dt><dd></dd></dl><dl class='fn-clear city-select-province'><dt>L-S</dt><dd></dd></dl><dl class='fn-clear city-select-province'><dt>T-Z</dt><dd></dd></dl></div><div class='city-select' id='city-city' style='display: none;'></div><a class='last' href='#city-street'  style='display: none;'></a><div class='city-select' id='city-district' style='display: none;'></div>");
+					$("#city-select-content").html("<div class='city-select' id='city-province'><dl class='fn-clear city-select-province'><dt>A-G</dt><dd></dd></dl><dl class='fn-clear city-select-province'><dt>H-K</dt><dd></dd></dl><dl class='fn-clear city-select-province'><dt>L-S</dt><dd></dd></dl><dl class='fn-clear city-select-province'><dt>T-Z</dt><dd></dd></dl></div><div class='city-select' id='city-city' style='display: none;'><dd></dd></div><a class='city-select' href='#city-street'  style='display: none;'><dd></dd></a><div class='last' id='city-district' style='display: none;'><dd></dd></div>");
 					
 					$(".city-select dd").css("width","233px");
 					
@@ -144,6 +148,35 @@
 						$("#city-province dl:eq(3) dd").append("<a title='" +china_pro_data["T-Z"][p][1]+ "' id='" +china_pro_data["T-Z"][p][0]+ "' href='javascript:;'>" +china_pro_data["T-Z"][p][1]+ "</a>");
 					}
 					
+					/*
+					*   选中省后的操作
+					*/
+					
+					$("#city-province a").click(function(){                		//选中省
+						window.city_selected_id = this.id;                 		//保存选中的省
+						var china_city_data = json2Operator(tb_China_City);
+						var city = [];
+						
+						for(var c in china_city_data){
+							if(this.id == china_city_data[c][2]){
+								city.push(china_city_data[c]);
+							}
+						}
+						//显示选中的省在选项栏上
+						$("#city-title").text(this.text);
+						//切换tab
+						$("[href='#city-province']").removeClass("current")       
+							.siblings("[href='#city-city']").addClass("current");
+						//隐藏省，显示市选项卡
+						$("#city-province").css("display","none")
+							.siblings("#city-city").css("display","block");
+						//加载市
+						for(var i in city){
+							$(".city-select dd")
+								.append("<a title='" +city[i][1]+ "' id='" +city[i][0]+ "' href='javascript:;'>" +city[i][1]+ "</a>");
+						}
+						
+					});
 					
 				}
 				if(country_id == 3){
