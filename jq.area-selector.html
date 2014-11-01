@@ -64,6 +64,20 @@
 				
 			});
 		}
+		function optionChange(){
+			$("div.bf-menuitem").bind({
+				mousedown:function(){
+				$(this).addClass("bf-menuitem-selected")
+					.siblings().removeClass("bf-menuitem-selected");
+				$("#jq-component-city-drop").addClass("J_CnCity-hidden");
+				
+			},mouseover:function(){
+				$(this).addClass("bf-menuitem-hover");
+			},mouseout:function(){
+				$(this).removeClass("bf-menuitem-hover");
+			}
+			});
+		}
 		//选择国家成功事件
 		$(".bf-menuitem").mousedown(function(){	
 
@@ -140,6 +154,7 @@
 				var country_id = parseInt(window.country_selected_id);        //转换当前国家id为数字
 				//判断选中的国家
 				if(country_id == 2){
+					$("#city-select-tab").css("display","block");
 					country_selected_name = "中国";                     //保存国家name
 					var china_pro_data = json2Operator(tb_China_Province);    //中国各省
 
@@ -229,7 +244,8 @@
 					
 				}
 				if(country_id == 3){
-					window.country_selected_name = "港澳台";             //保存国家name
+					$("#city-select-tab").css("display","block");
+					country_selected_name = "港澳台";             		//保存国家name
 					var gat_data = json2Operator(tb_Gat_data);          //港澳台
 					var gat = [];
 
@@ -325,12 +341,30 @@
 
 				}
 				if(country_id == 4){
+					country_selected_name = "海外";							//保存国家name
 					var oversea_data = json2Operator(tb_Oversea);           //海外
-					var ov = [];
+					$("#city-select-tab").css("display","none");			//隐藏选项卡
 					
-					alert(oversea_data["2"]);
+					$("#city-select-content").html("<div id='city-select-option' class='city-select-option'></div>");
+					
+					for(var ov in oversea_data){
+						$("#city-select-option")
+							.append("<div id='"+ov+"' class='bf-popupmenu-content bf-menuitem'>"+oversea_data[ov]+"</div>");
+					}
+					optionChange();                                           //绑动态元素
+						
+					
+					$(".bf-menuitem").click(function(){
+						country_selected_id = this.id;                 		   //保存选中的国家id
+						country_selected_name = this.text;					   //保存选中的国家name
+								
+						//显示选中的国家在选项栏上
+						$("#city-title").text(country_selected_name);
+					});
+					
 				}
 				if(country_id == 5){
+					$("#city-select-tab").css("display","block");
 					var malaysia_data = json2Operator(tb_MalaysiaPC);          //马来西亚
 					var ma = [];
 

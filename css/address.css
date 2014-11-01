@@ -48,23 +48,26 @@ div {
 .bf-menu-button-open .bf-menu-button-dropdown{
 	background-position:-10px -10px;
 }
-.bf-menu .bf-menuitem-hover{
-	color:#f60;
+.bf-menuitem-hover{
+	color: #fff;
 	background-color:#fff8f3;
 }
-.bf-menu .bf-menuitem-selected{
+.bf-menuitem-selected{
 	background:url("http://gtms03.alicdn.com/tps/i3/T1J8TvFlVbXXXugmZ.-11-8.png") no-repeat 10px 10px;
 	color:#f60;
 	font-weight:700;
 }
-.bf-menu {
-	border: 1px solid #ccc;
-	background-color: #fff;
+.city-select-option{
+	width:300px;
+	height:250px; 
+	overflow:auto;
+	border:1px solid #ccc;	
 }
-body .bf-menu .bf-menuitem {
+
+.bf-menuitem {
 	padding-left: 20px;
 }
-.bf-menu .bf-menuitem {
+.bf-menuitem {
 	height: 26px;
 	line-height: 26px;
 	color: #333;
@@ -73,7 +76,7 @@ body .bf-menu .bf-menuitem {
 	cursor: pointer;
 	overflow: hidden;
 }
-body .bf-menu .bf-menuitem-selected {
+.bf-menuitem-selected {
 	background-position: 5px 10px;
 }
 .bf-popupmenu-content{
