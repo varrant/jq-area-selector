@@ -202,6 +202,7 @@
 						//隐藏省，显示市选项卡
 						$("#city-province").css("display","none")
 							.siblings("#city-city").css("display","block");
+						$("#city-city dd").html("");
 						//加载市
 						for(var i in city){
 							$("#city-city dd")
@@ -216,28 +217,40 @@
 								city_selected_name = this.text;				   //保存选中市name
 								var china_district_data = json2Operator(tb_China_data);
 								var district = [];
-								alert(china_district_data["110000"][1]);
 								
 								for(var d in china_district_data){
-									if(this.id == china_city_data[d][1]){
-									district.push(china_city_data[d]);
+									if(this.id == china_district_data[d][2]){
+									district.push(china_district_data[d]);
 									}
 								}
 								
 								
-								//显示选中的省在选项栏上
-								$("#city-title").text().append("\'" + this.text + "'");
+								//显示选中的市在选项栏上
+								$("#city-title").text(province_selected_name+"/"+city_selected_name);
 								//切换tab
 								$("[href='#city-city']").removeClass("current")       
 									.siblings("[href='#city-district']").addClass("current");
-								//隐藏省，显示市选项卡
+								//隐藏省市，显示县选项卡
 								$("#city-city").css("display","none")
 									.siblings("#city-district").css("display","block");
-								//加载市
+								//加载县
+								$("#city-district dd").html("");
 								for(var i in district){
 									$("#city-district dd")
 										.append("<a title='" +district[i][1]+ "' id='" +district[i][0]+ "' href='javascript:;'>" +district[i][1]+ "</a>");
 								}
+								/*
+								*选中县后的操作
+								*/
+								$("#city-district a").click(function(){
+									district_selected_id = this.id;        						//保存选中县的id
+									district_selected_name = this.text;							//保存选中县name
+		
+									$("#city-title").text(province_selected_name+"/"+city_selected_name+"/"+district_selected_name);     				//显示选中的省在选项栏上
+
+								});
+								return true;
+								
 						});
 						
 					});
