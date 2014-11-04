@@ -49,7 +49,7 @@ div {
 	background-position:-10px -10px;
 }
 .bf-menuitem-hover{
-	color: #fff;
+	color: #f60;
 	background-color:#fff8f3;
 }
 .bf-menuitem-selected{
@@ -61,18 +61,18 @@ div {
 	width:300px;
 	height:250px; 
 	overflow:auto;
-	border:1px solid #ccc;	
 }
+	.city-select-option .bf-menuitem {
+		padding-left: 20px;
+		cursor: pointer;
+	}
 
-.bf-menuitem {
-	padding-left: 20px;
-}
-.bf-menuitem {
+.bf-menu .bf-menuitem {
 	height: 26px;
 	line-height: 26px;
 	color: #333;
 	font-size: 12px;
-	padding-left: 30px;
+	padding-left: 20px;
 	cursor: pointer;
 	overflow: hidden;
 }
@@ -82,6 +82,7 @@ div {
 .bf-popupmenu-content{
 	max-height:300px;
 	_height:expression(thisscrollHeight > 300 ? "300px" :"auto");
+	border:1px solid #ccc;
 }
 
 .bf-popupmenu-hidden {        
@@ -210,6 +211,7 @@ dd {
 .jq-overlay {
 	position: absolute;
 	z-index: 20002;
+	border:1px solid #ccc;
 }
 .jq-dialog, .jq-overlay {
 	position: absolute;

@@ -45,6 +45,7 @@
 		$("#J_CnCity").click(function(){
 			$("#jq-component-city-drop").toggleClass("J_CnCity-hidden");
 		});
+		
 		//改变选项时，选项内容也要切换
 		function changeTab(){
 			$("#city-select-tab a").bind("click",function(){
@@ -67,16 +68,24 @@
 		function optionChange(){
 			$("div.bf-menuitem").bind({
 				mousedown:function(){
-				$(this).addClass("bf-menuitem-selected")
-					.siblings().removeClass("bf-menuitem-selected");
-				$("#jq-component-city-drop").addClass("J_CnCity-hidden");
-				
-			},mouseover:function(){
-				$(this).addClass("bf-menuitem-hover");
-			},mouseout:function(){
-				$(this).removeClass("bf-menuitem-hover");
-			}
+					$(this).addClass("bf-menuitem-selected")
+						.siblings().removeClass("bf-menuitem-selected");
+					$("#jq-component-city-drop").addClass("J_CnCity-hidden");	
+					
+					province_selected_id = this.id;                 		   //保存选中的国家id
+					provinc_selected_name = $(this).text();					   //保存选中的国家name
+					
+					//显示选中的国家在选项栏上
+					$("#city-title").text(provinc_selected_name);
+						
+				},mouseover:function(){
+					$(this).addClass("bf-menuitem-hover");
+					
+				},mouseout:function(){
+					$(this).removeClass("bf-menuitem-hover");
+				}
 			});
+					
 		}
 		//选择国家成功事件
 		$(".bf-menuitem").mousedown(function(){	
@@ -90,7 +99,7 @@
 
 				$("#jq-component-country-drop").addClass("bf-popupmenu-hidden"); //隐藏下拉项
 																				 
-				Country_Change();                                                //选中的国家显示出来
+				countryChange();                                                //选中的国家显示出来
 			}
 			else{
 				$(".bf-menuitem").removeClass("bf-menuitem-selected");           //添加之前先删除此类的选中样式
@@ -99,12 +108,12 @@
 
 				$("#jq-component-country-drop").addClass("bf-popupmenu-hidden"); //隐藏下拉项
 																				 
-				Country_Change();                                                //选中的国家显示出来
+				countryChange();                                                //选中的国家显示出来
 			}
 			
 		});
 		//动态改变选中后的国家
-		function Country_Change(){
+		function countryChange(){
 			var country_selected_code = parseInt(window.country_selected_id);            //转换id为数字
 
 			switch(country_selected_code){
@@ -354,7 +363,7 @@
 
 				}
 				if(country_id == 4){
-					country_selected_name = "海外";							//保存国家name
+					window.country_selected_name = "海外";							//保存国家name
 					var oversea_data = json2Operator(tb_Oversea);           //海外
 					$("#city-select-tab").css("display","none");			//隐藏选项卡
 					
@@ -362,18 +371,10 @@
 					
 					for(var ov in oversea_data){
 						$("#city-select-option")
-							.append("<div id='"+ov+"' class='bf-popupmenu-content bf-menuitem'>"+oversea_data[ov]+"</div>");
+							.append("<div id='"+ov+"' class='bf-menuitem'>"+oversea_data[ov]+"</div>");
 					}
 					optionChange();                                           //绑动态元素
-						
 					
-					$(".bf-menuitem").click(function(){
-						country_selected_id = this.id;                 		   //保存选中的国家id
-						country_selected_name = this.text;					   //保存选中的国家name
-								
-						//显示选中的国家在选项栏上
-						$("#city-title").text(country_selected_name);
-					});
 					
 				}
 				if(country_id == 5){
